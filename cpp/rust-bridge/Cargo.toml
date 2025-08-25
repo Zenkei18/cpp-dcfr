@@ -1,0 +1,15 @@
+[package]
+name = "pokers-ffi"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "pokers_ffi"
+crate-type = ["staticlib", "cdylib"]
+
+[dependencies]
+pokers = "2.2"
+cxx = "1.0"
+
+[build-dependencies]
+cxx-build = "1.0"
