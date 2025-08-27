@@ -1,0 +1,13 @@
+/models
+/models_om
+/models_mixed_om
+/logs
+/logs/*.log
+/venv
+/.venv
+/build
+/dist
+.ds_store
+.env
+__pycache__
+util.py
