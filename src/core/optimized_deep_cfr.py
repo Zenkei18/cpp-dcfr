@@ -525,7 +525,19 @@ class OptimizedDeepCFRAgent:
             # Forward pass
             action_advantages, bet_size_preds = self.advantage_net(state_tensors, opponent_feature_tensors)
             
-            # Action loss  
+            # Action loss with robust tensor handling
+            if action_advantages.dim() != 2:
+                raise RuntimeError(f"Expected action_advantages to be 2D, got shape {action_advantages.shape}")
+            if action_type_tensors.dim() != 1:
+                raise RuntimeError(f"Expected action_type_tensors to be 1D, got shape {action_type_tensors.shape}")
+            if action_advantages.size(0) != action_type_tensors.size(0):
+                raise RuntimeError(f"Batch size mismatch: advantages {action_advantages.size(0)} vs actions {action_type_tensors.size(0)}")
+            
+            # Ensure action indices are within bounds
+            max_action = action_type_tensors.max().item()
+            if max_action >= action_advantages.size(1):
+                raise RuntimeError(f"Action index {max_action} out of bounds for {action_advantages.size(1)} actions")
+            
             predicted_regrets = action_advantages.gather(1, action_type_tensors.unsqueeze(1)).squeeze(1)
             action_loss = F.smooth_l1_loss(predicted_regrets, regret_tensors, reduction='none')
             weighted_action_loss = (action_loss * weight_tensors).mean()
