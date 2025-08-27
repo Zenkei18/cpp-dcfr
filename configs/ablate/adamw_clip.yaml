@@ -1,0 +1,56 @@
+# AdamW + Enhanced Gradient Clipping Configuration
+# Switches to AdamW optimizer with proper weight decay and improved gradient clipping
+
+model:
+  name: "PokerNetwork"
+  input_size: 156
+  hidden_size: 256
+  num_actions: 3
+  dropout: 0.0
+  use_layer_norm: false
+  use_batch_norm: false
+  use_residuals: false
+
+training:
+  # Enhanced optimizer settings
+  optimizer: "adamw"  # Switch to AdamW
+  advantage_lr: 3.0e-4  # Higher learning rate for faster convergence
+  strategy_lr: 1.0e-4   # Balanced strategy learning rate
+  weight_decay: 1.0e-2  # Proper weight decay for regularization
+  betas: [0.9, 0.999]
+  eps: 1.0e-8
+  
+  # Scheduler with linear warmup
+  scheduler: "linear_warmup"
+  warmup_steps: 1000
+  
+  # Training hyperparameters
+  batch_size: 128
+  epochs_per_update: 3
+  memory_size: 300000
+  
+  # Enhanced regularization
+  gradient_clip_norm: 1.0  # Increased for better stability
+  use_amp: false
+  
+  # Target normalization
+  normalize_targets: false
+  target_scaler: "none"
+
+# Memory and prioritization
+memory:
+  prioritized: true
+  alpha: 0.6
+  beta_start: 0.4
+  beta_end: 1.0
+
+# Enhanced logging
+logging:
+  log_grad_norms: true   # Enable gradient norm logging
+  log_lr: true          # Log learning rate
+  log_steps_per_sec: true
+  tensorboard: true
+
+# Seeds for reproducibility
+seed: 42
+deterministic: false

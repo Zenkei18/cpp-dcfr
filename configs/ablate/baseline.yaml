@@ -1,0 +1,54 @@
+# Baseline Configuration - Current training setup
+# This represents the original training configuration before optimizations
+
+model:
+  name: "PokerNetwork"
+  input_size: 156
+  hidden_size: 256
+  num_actions: 3
+  dropout: 0.0
+  use_layer_norm: false
+  use_batch_norm: false
+  use_residuals: false
+
+training:
+  # Optimizer settings (original)
+  optimizer: "adam"  # Original basic Adam
+  advantage_lr: 1.0e-6
+  strategy_lr: 5.0e-5
+  weight_decay: 1.0e-5
+  
+  # Scheduler settings
+  scheduler: "none"
+  warmup_steps: 0
+  
+  # Training hyperparameters
+  batch_size: 128
+  epochs_per_update: 3
+  memory_size: 300000
+  
+  # Regularization
+  gradient_clip_norm: 0.5
+  use_amp: false
+  
+  # Target normalization
+  normalize_targets: false
+  target_scaler: "none"
+
+# Memory and prioritization
+memory:
+  prioritized: true
+  alpha: 0.6
+  beta_start: 0.4
+  beta_end: 1.0
+
+# Logging and evaluation
+logging:
+  log_grad_norms: false
+  log_lr: false
+  log_steps_per_sec: false
+  tensorboard: true
+
+# Seeds for reproducibility
+seed: 42
+deterministic: false
