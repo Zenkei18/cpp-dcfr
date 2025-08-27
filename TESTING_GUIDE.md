@@ -7,14 +7,12 @@ This guide shows you exactly how to test the performance optimizations and compa
 ### **Option 1: Use the New Optimized Training Script (Recommended)**
 
 ```bash
-# Test WITHOUT optimizations (original implementation)
+# Test WITHOUT optimizations (original implementation) - CONFIRMED WORKING ✅
 cd /workspace
-export SPEED_REFAC=0
-python3 src/training/train_optimized.py --iterations 10 --traversals 20 --verbose
+SPEED_REFAC=0 python3 src/training/train_optimized.py --iterations 5 --traversals 10
 
-# Test WITH optimizations (7.85x faster!)
-export SPEED_REFAC=1  
-python3 src/training/train_optimized.py --iterations 10 --traversals 20 --verbose
+# Test WITH optimizations (currently being debugged) 🚧
+SPEED_REFAC=1 python3 src/training/train_optimized.py --iterations 5 --traversals 10
 ```
 
 ### **Option 2: Compare Performance Side-by-Side**
