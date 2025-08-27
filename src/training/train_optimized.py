@@ -54,7 +54,7 @@ def evaluate_against_random(agent, num_games=500, num_players=6):
                 sb=1,
                 bb=2,
                 stake=200.0,
-                seed=game
+                seed=random.randint(0, 2147483647)  # Random evaluation games
             )
             
             # Play until the game is over
@@ -162,7 +162,7 @@ def train_deep_cfr(num_iterations=100, traversals_per_iteration=50,
                 sb=1,
                 bb=2,
                 stake=200.0,
-                seed=random.randint(0, 10000)
+                seed=random.randint(0, 2147483647)  # Full 32-bit range for maximum variety
             )
             
             # Perform CFR traversal
