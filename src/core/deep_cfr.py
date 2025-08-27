@@ -348,9 +348,10 @@ class DeepCFRAgent:
         if int(state.stage) >= 2:  # Turn or River
             adjustment *= 1.2  # Increase bets in later streets
         
-        # Adjust based on pot size relative to starting stack
-        initial_stake = state.players_state[0].stake + state.players_state[0].bet_chips
-        pot_ratio = state.pot / initial_stake
+        # Adjust based on pot size relative to original starting stake
+        # Use fixed starting stake to avoid inconsistent behavior as player stacks change
+        starting_stake = 200.0  # Original starting stake for all players
+        pot_ratio = state.pot / starting_stake
         if pot_ratio > 0.5:  # Large pot
             adjustment *= 1.1  # Bet bigger in large pots
         elif pot_ratio < 0.1:  # Small pot

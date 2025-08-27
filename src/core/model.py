@@ -91,12 +91,10 @@ def encode_state(state, player_id=0):
     stage_enc[int(state.stage)] = 1
     encoded.append(stage_enc)
     
-    # Get initial stake - prevent division by zero
-    initial_stake = state.players_state[0].stake
-    if initial_stake <= 0:
-        if VERBOSE:
-            print(f"WARNING: Initial stake is zero or negative: {initial_stake}")
-        initial_stake = 1.0  # Use 1.0 as a fallback to prevent division by zero
+    # CRITICAL: Always use the original starting stake for consistent normalization
+    # This prevents encoding from breaking when players win/lose big amounts
+    # A 400-chip pot should ALWAYS encode the same way, regardless of player stacks
+    initial_stake = 200.0  # The fixed starting stake used throughout training
     
     # Encode pot size (normalized by initial stake)
     pot_enc = [state.pot / initial_stake]
