@@ -13,7 +13,7 @@ def set_verbose(verbose_mode):
 
 class PokerNetwork(nn.Module):
     """Poker network with continuous bet sizing capabilities."""
-    def __init__(self, input_size=500, hidden_size=256, num_actions=3):
+    def __init__(self, input_size=156, hidden_size=256, num_actions=3):
         super().__init__()
         # Shared feature extraction layers
         self.base = nn.Sequential(

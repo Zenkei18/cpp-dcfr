@@ -21,8 +21,13 @@ from .optimized_model import (
 )
 from .deep_cfr import PrioritizedMemory  # Reuse existing memory implementation
 from .model import VERBOSE, set_verbose
-from ..utils.settings import STRICT_CHECKING
-from ..utils.logging import log_game_error
+try:
+    from ..utils.settings import STRICT_CHECKING
+    from ..utils.logging import log_game_error
+except ImportError:
+    # Fallback for direct execution
+    from src.utils.settings import STRICT_CHECKING
+    from src.utils.logging import log_game_error
 
 class OptimizedDeepCFRAgent:
     """
@@ -519,12 +524,6 @@ class OptimizedDeepCFRAgent:
             
             # Forward pass
             action_advantages, bet_size_preds = self.advantage_net(state_tensors, opponent_feature_tensors)
-            
-            # Debug tensor shapes
-            if VERBOSE:
-                print(f"DEBUG: action_advantages shape: {action_advantages.shape}")
-                print(f"DEBUG: action_type_tensors shape: {action_type_tensors.shape}")
-                print(f"DEBUG: action_type_tensors values: {action_type_tensors}")
             
             # Action loss  
             predicted_regrets = action_advantages.gather(1, action_type_tensors.unsqueeze(1)).squeeze(1)
