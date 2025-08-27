@@ -21,8 +21,13 @@ from .optimized_model import (
 )
 from .deep_cfr import PrioritizedMemory  # Reuse existing memory implementation
 from .model import VERBOSE, set_verbose
-from ..utils.settings import STRICT_CHECKING
-from ..utils.logging import log_game_error
+try:
+    from ..utils.settings import STRICT_CHECKING
+    from ..utils.logging import log_game_error
+except ImportError:
+    # Fallback for direct execution
+    from src.utils.settings import STRICT_CHECKING
+    from src.utils.logging import log_game_error
 
 class OptimizedDeepCFRAgent:
     """
@@ -520,14 +525,22 @@ class OptimizedDeepCFRAgent:
             # Forward pass
             action_advantages, bet_size_preds = self.advantage_net(state_tensors, opponent_feature_tensors)
             
-            # Debug tensor shapes
-            if VERBOSE:
-                print(f"DEBUG: action_advantages shape: {action_advantages.shape}")
-                print(f"DEBUG: action_type_tensors shape: {action_type_tensors.shape}")
-                print(f"DEBUG: action_type_tensors values: {action_type_tensors}")
+            # Debug tensor shapes - ALWAYS show during error
+            print(f"🔍 DEBUG: action_advantages shape: {action_advantages.shape}")
+            print(f"🔍 DEBUG: action_advantages dims: {action_advantages.dim()}")
+            print(f"🔍 DEBUG: action_type_tensors shape: {action_type_tensors.shape}")
+            print(f"🔍 DEBUG: action_type_tensors dims: {action_type_tensors.dim()}")
+            print(f"🔍 DEBUG: action_type_tensors sample: {action_type_tensors[:5] if len(action_type_tensors) > 0 else 'empty'}")
             
             # Action loss  
-            predicted_regrets = action_advantages.gather(1, action_type_tensors.unsqueeze(1)).squeeze(1)
+            try:
+                predicted_regrets = action_advantages.gather(1, action_type_tensors.unsqueeze(1)).squeeze(1)
+                print(f"✅ DEBUG: Gather successful, shape: {predicted_regrets.shape}")
+            except Exception as gather_error:
+                print(f"❌ DEBUG: Gather failed: {gather_error}")
+                print(f"🔍 DEBUG: action_advantages: {action_advantages}")
+                print(f"🔍 DEBUG: action_type_tensors.unsqueeze(1): {action_type_tensors.unsqueeze(1)}")
+                raise
             action_loss = F.smooth_l1_loss(predicted_regrets, regret_tensors, reduction='none')
             weighted_action_loss = (action_loss * weight_tensors).mean()
             
