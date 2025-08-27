@@ -283,7 +283,24 @@ class OptimizedBatchProcessor:
         
         # Create tensors directly to avoid shape mismatch issues
         result['states'] = torch.from_numpy(np.array(states, dtype=np.float32)).to(self.device)
-        result['actions'] = torch.from_numpy(np.array(actions, dtype=np.int64)).to(self.device)
+        
+        # Debug and fix action tensor shape issues
+        actions_array = np.array(actions)
+        if actions_array.ndim > 1:
+            # If actions is multi-dimensional, flatten to 1D by taking first element of each
+            print(f"🔧 WARNING: Actions have wrong shape {actions_array.shape}, fixing...")
+            actions_fixed = []
+            for action_item in actions:
+                if hasattr(action_item, '__len__') and not isinstance(action_item, (int, np.integer)):
+                    # Take first element if it's an array/list
+                    actions_fixed.append(int(action_item[0]) if len(action_item) > 0 else 0)
+                else:
+                    # Keep scalar values as-is
+                    actions_fixed.append(int(action_item))
+            result['actions'] = torch.from_numpy(np.array(actions_fixed, dtype=np.int64)).to(self.device)
+        else:
+            result['actions'] = torch.from_numpy(np.array(actions, dtype=np.int64)).to(self.device)
+        
         result['regrets'] = torch.from_numpy(np.array(regrets, dtype=np.float32)).to(self.device)
         
         if strategies:
