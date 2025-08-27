@@ -21,14 +21,16 @@ from contextlib import contextmanager
 from dataclasses import dataclass, asdict
 from typing import Dict, List, Any, Optional, Callable
 
-# Add src to Python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+# Add project root and src to Python path
+project_root = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, project_root)
+sys.path.insert(0, os.path.join(project_root, 'src'))
 
 import pokers as pkrs
-from core.deep_cfr import DeepCFRAgent
-from core.model import encode_state, PokerNetwork, set_verbose
-from agents.random_agent import RandomAgent
-from utils.settings import set_strict_checking
+from src.core.deep_cfr import DeepCFRAgent
+from src.core.model import encode_state, PokerNetwork, set_verbose
+from src.agents.random_agent import RandomAgent
+from src.utils.settings import set_strict_checking
 
 
 @dataclass

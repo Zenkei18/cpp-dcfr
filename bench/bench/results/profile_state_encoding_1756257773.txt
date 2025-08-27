@@ -1,0 +1,14 @@
+         1552 function calls in 0.001 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.001    0.001 /workspace/bench/benchmark_simple.py:374(encode_multiple_states)
+       50    0.001    0.000    0.001    0.000 /workspace/bench/../src/core/model.py:57(encode_state)
+      750    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+      350    0.000    0.000    0.000    0.000 {built-in method numpy.zeros}
+      350    0.000    0.000    0.000    0.000 /home/ubuntu/.local/lib/python3.13/site-packages/numpy/_core/multiarray.py:188(concatenate)
+       50    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
