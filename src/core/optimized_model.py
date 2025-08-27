@@ -167,7 +167,7 @@ class OptimizedPokerNetwork(nn.Module):
     4. Batch processing support
     """
     
-    def __init__(self, input_size: int = 500, hidden_size: int = 256, num_actions: int = 3):
+    def __init__(self, input_size: int = 156, hidden_size: int = 256, num_actions: int = 3):
         super().__init__()
         
         if SPEED_REFAC:
@@ -236,7 +236,7 @@ class OptimizedBatchProcessor:
             
         # Common tensor shapes for this domain
         shapes = {
-            'states': (self.max_batch_size, 500),  # Typical state encoding size
+            'states': (self.max_batch_size, 156),  # Actual state encoding size
             'actions': (self.max_batch_size,),
             'regrets': (self.max_batch_size,),
             'strategies': (self.max_batch_size, 3),
@@ -281,27 +281,15 @@ class OptimizedBatchProcessor:
         # Use preallocated tensors and slice them
         result = {}
         
-        # Copy data into preallocated tensors
-        states_tensor = self.tensor_pool['states'][:batch_size]
-        states_tensor.copy_(torch.from_numpy(np.array(states, dtype=np.float32)))
-        result['states'] = states_tensor
-        
-        actions_tensor = self.tensor_pool['actions'][:batch_size]
-        actions_tensor.copy_(torch.from_numpy(np.array(actions, dtype=np.int64)))
-        result['actions'] = actions_tensor.long()
-        
-        regrets_tensor = self.tensor_pool['regrets'][:batch_size]  
-        regrets_tensor.copy_(torch.from_numpy(np.array(regrets, dtype=np.float32)))
-        result['regrets'] = regrets_tensor
+        # Create tensors directly to avoid shape mismatch issues
+        result['states'] = torch.from_numpy(np.array(states, dtype=np.float32)).to(self.device)
+        result['actions'] = torch.from_numpy(np.array(actions, dtype=np.int64)).to(self.device)
+        result['regrets'] = torch.from_numpy(np.array(regrets, dtype=np.float32)).to(self.device)
         
         if strategies:
-            strategies_tensor = self.tensor_pool['strategies'][:batch_size]
-            strategies_tensor.copy_(torch.from_numpy(np.array(strategies, dtype=np.float32)))
-            result['strategies'] = strategies_tensor
+            result['strategies'] = torch.from_numpy(np.array(strategies, dtype=np.float32)).to(self.device)
         
-        bet_sizes_tensor = self.tensor_pool['bet_sizes'][:batch_size]
-        bet_sizes_tensor.copy_(torch.from_numpy(np.array(bet_sizes, dtype=np.float32).reshape(-1, 1)))
-        result['bet_sizes'] = bet_sizes_tensor
+        result['bet_sizes'] = torch.from_numpy(np.array(bet_sizes, dtype=np.float32).reshape(-1, 1)).to(self.device)
         
         return result
     

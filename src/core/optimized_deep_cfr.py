@@ -45,8 +45,8 @@ class OptimizedDeepCFRAgent:
         # Define action types (Fold, Check/Call, Raise)
         self.num_actions = 3
         
-        # Calculate input size based on optimized state encoding
-        input_size = 52 + 52 + 5 + 1 + num_players + num_players + num_players*4 + 1 + 4 + 5
+        # Calculate input size based on actual state encoding (empirically determined)
+        input_size = 156  # Actual size from encode_state function
         
         # Create networks - use optimized version if enabled
         if SPEED_REFAC:
@@ -520,7 +520,13 @@ class OptimizedDeepCFRAgent:
             # Forward pass
             action_advantages, bet_size_preds = self.advantage_net(state_tensors, opponent_feature_tensors)
             
-            # Action loss
+            # Debug tensor shapes
+            if VERBOSE:
+                print(f"DEBUG: action_advantages shape: {action_advantages.shape}")
+                print(f"DEBUG: action_type_tensors shape: {action_type_tensors.shape}")
+                print(f"DEBUG: action_type_tensors values: {action_type_tensors}")
+            
+            # Action loss  
             predicted_regrets = action_advantages.gather(1, action_type_tensors.unsqueeze(1)).squeeze(1)
             action_loss = F.smooth_l1_loss(predicted_regrets, regret_tensors, reduction='none')
             weighted_action_loss = (action_loss * weight_tensors).mean()
