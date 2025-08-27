@@ -1,0 +1,60 @@
+# Cosine LR Schedule + AMP Configuration
+# Adds cosine annealing scheduler and automatic mixed precision
+
+model:
+  name: "PokerNetwork"
+  input_size: 156
+  hidden_size: 256
+  num_actions: 3
+  dropout: 0.1  # Small dropout for regularization
+  use_layer_norm: false
+  use_batch_norm: false
+  use_residuals: false
+
+training:
+  # AdamW optimizer with cosine scheduling
+  optimizer: "adamw"
+  advantage_lr: 5.0e-4  # Slightly higher initial LR for cosine schedule
+  strategy_lr: 2.0e-4
+  weight_decay: 1.0e-2
+  betas: [0.9, 0.999]
+  eps: 1.0e-8
+  
+  # Cosine annealing scheduler
+  scheduler: "cosine_annealing"
+  warmup_steps: 500
+  max_steps: 10000  # Total training steps for cosine schedule
+  min_lr_ratio: 0.1  # Minimum LR as fraction of max LR
+  
+  # Training hyperparameters
+  batch_size: 128
+  epochs_per_update: 3
+  memory_size: 300000
+  
+  # Enhanced regularization with AMP
+  gradient_clip_norm: 1.0
+  use_amp: true      # Enable automatic mixed precision
+  amp_init_scale: 65536.0
+  
+  # Target normalization
+  normalize_targets: false
+  target_scaler: "none"
+
+# Memory and prioritization
+memory:
+  prioritized: true
+  alpha: 0.6
+  beta_start: 0.4
+  beta_end: 1.0
+
+# Enhanced logging
+logging:
+  log_grad_norms: true
+  log_lr: true
+  log_steps_per_sec: true
+  log_amp_scale: true
+  tensorboard: true
+
+# Seeds for reproducibility
+seed: 42
+deterministic: false

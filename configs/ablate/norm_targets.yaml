@@ -1,0 +1,62 @@
+# Target Normalization + Architecture Enhancements Configuration
+# Adds target normalization and improved model architecture
+
+model:
+  name: "EnhancedPokerNetwork"  # Enhanced architecture
+  input_size: 156
+  hidden_size: 256
+  num_actions: 3
+  dropout: 0.1
+  use_layer_norm: true   # Add LayerNorm for training stability
+  use_batch_norm: false  # LayerNorm is generally better for this use case
+  use_residuals: true    # Add residual connections
+
+training:
+  # Optimized training settings
+  optimizer: "adamw"
+  advantage_lr: 3.0e-4
+  strategy_lr: 1.0e-4
+  weight_decay: 1.0e-2
+  betas: [0.9, 0.999]
+  eps: 1.0e-8
+  
+  # OneCycle LR scheduler for optimal convergence
+  scheduler: "one_cycle"
+  warmup_steps: 1000
+  max_steps: 10000
+  max_lr_multiplier: 3.0  # Peak LR = base_lr * multiplier
+  
+  # Training hyperparameters
+  batch_size: 128
+  epochs_per_update: 3
+  memory_size: 300000
+  
+  # Enhanced regularization
+  gradient_clip_norm: 1.0
+  use_amp: true
+  amp_init_scale: 65536.0
+  
+  # Target normalization for advantage head
+  normalize_targets: true
+  target_scaler: "robust"  # Use robust scaler for outlier resistance
+  update_scaler_freq: 100  # Update scaler statistics every N steps
+
+# Memory and prioritization
+memory:
+  prioritized: true
+  alpha: 0.6
+  beta_start: 0.4
+  beta_end: 1.0
+
+# Full logging
+logging:
+  log_grad_norms: true
+  log_lr: true
+  log_steps_per_sec: true
+  log_amp_scale: true
+  log_target_stats: true  # Log target normalization statistics
+  tensorboard: true
+
+# Seeds for reproducibility
+seed: 42
+deterministic: false
