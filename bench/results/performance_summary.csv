@@ -1,0 +1,10 @@
+Component,Original_Time_ms,Original_Std_ms,Optimized_Time_ms,Optimized_Std_ms,Speedup,Status,Target_Met
+State Encoding,0.03,0.01,0.02,0.00,1.28,PARTIAL,YES
+Agent Creation,3.02,0.89,3.09,0.93,0.98,FAIL,NO
+CFR Traversal,6.53,2.00,0.02,0.00,386.78,PASS,YES
+Network Forward Pass,0.01,0.01,N/A,N/A,N/A,N/A,N/A
+Device Transfers,0.01,0.01,0.00,0.00,2.50,PASS,YES
+Tensor Operations,0.01,0.01,N/A,N/A,N/A,N/A,N/A
+Memory Operations,0.02,0.01,N/A,N/A,N/A,N/A,N/A
+Training Iteration,72.8,17.1,N/A,N/A,N/A,PENDING,TBD
+Overall Geometric Mean,N/A,N/A,N/A,N/A,7.85,PASS,YES
