@@ -91,13 +91,10 @@ def encode_state(state, player_id=0):
     stage_enc[int(state.stage)] = 1
     encoded.append(stage_enc)
     
-    # Use the game's starting stake for consistent normalization
-    # All players start with 200.0 in training, so use that for normalization
-    initial_stake = 200.0  # Fixed starting stake used in training
-    
-    # Alternative approach: use max stake among players (closest to starting amount)
-    # max_stake = max(p.stake for p in state.players_state) 
-    # initial_stake = max(max_stake, 1.0)  # Fallback to prevent division by zero
+    # CRITICAL: Always use the original starting stake for consistent normalization
+    # This prevents encoding from breaking when players win/lose big amounts
+    # A 400-chip pot should ALWAYS encode the same way, regardless of player stacks
+    initial_stake = 200.0  # The fixed starting stake used throughout training
     
     # Encode pot size (normalized by initial stake)
     pot_enc = [state.pot / initial_stake]
