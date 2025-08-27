@@ -1,0 +1,74 @@
+{
+  "device": "cpu",
+  "pytorch_version": "2.8.0+cu128",
+  "cuda_available": false,
+  "timestamp": "2025-08-27 01:42:47",
+  "benchmarks": {
+    "poker_state_creation": {
+      "name": "poker_state_creation",
+      "mean_time": 1.0494999969523633e-05,
+      "std_time": 5.284916143041984e-06,
+      "min_time": 6.757999926776392e-06,
+      "max_time": 1.4232000012270873e-05,
+      "runs": 2,
+      "total_time": 2.0989999939047266e-05,
+      "memory_mb": null,
+      "extra_info": {}
+    },
+    "state_encoding": {
+      "name": "state_encoding",
+      "mean_time": 3.199249999852327e-05,
+      "std_time": 9.996368320050298e-06,
+      "min_time": 2.492400017217733e-05,
+      "max_time": 3.9060999824869214e-05,
+      "runs": 2,
+      "total_time": 6.398499999704654e-05,
+      "memory_mb": null,
+      "extra_info": {}
+    },
+    "numpy_operations": {
+      "name": "numpy_operations",
+      "mean_time": 1.6253499779850245e-05,
+      "std_time": 3.7455445605671473e-06,
+      "min_time": 1.3604999821836827e-05,
+      "max_time": 1.8901999737863662e-05,
+      "runs": 2,
+      "total_time": 3.250699955970049e-05,
+      "memory_mb": null,
+      "extra_info": {}
+    },
+    "tensor_operations": {
+      "name": "tensor_operations",
+      "mean_time": 3.054250009881798e-05,
+      "std_time": 3.0178610467416053e-05,
+      "min_time": 9.202999990520766e-06,
+      "max_time": 5.18820002071152e-05,
+      "runs": 2,
+      "total_time": 6.108500019763596e-05,
+      "memory_mb": null,
+      "extra_info": {}
+    },
+    "cpu_to_device_transfer": {
+      "name": "cpu_to_device_transfer",
+      "mean_time": 7.592500196551555e-06,
+      "std_time": 7.662916181153421e-06,
+      "min_time": 2.1740002011938486e-06,
+      "max_time": 1.3011000191909261e-05,
+      "runs": 2,
+      "total_time": 1.518500039310311e-05,
+      "memory_mb": null,
+      "extra_info": {}
+    },
+    "device_to_numpy_transfer": {
+      "name": "device_to_numpy_transfer",
+      "mean_time": 2.4635000954731368e-06,
+      "std_time": 6.130612054606783e-07,
+      "min_time": 2.0300003598094918e-06,
+      "max_time": 2.8969998311367817e-06,
+      "runs": 2,
+      "total_time": 4.9270001909462735e-06,
+      "memory_mb": null,
+      "extra_info": {}
+    }
+  }
+}
