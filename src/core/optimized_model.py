@@ -72,8 +72,8 @@ def encode_state_optimized(state: Any, player_id: int = 0) -> np.ndarray:
     num_players = len(state.players_state)
     _initialize_encoding_cache(num_players)
     
-    # Pre-calculate commonly used values
-    initial_stake = max(1.0, state.players_state[0].stake)  # Avoid division by zero
+    # Use consistent starting stake for normalization (not player's current stake)
+    initial_stake = 200.0  # Fixed starting stake used in training
     pot_size = state.pot
     min_bet = state.min_bet
     
